@@ -1,0 +1,112 @@
+<div class="textfonts ">
+    <!--navbar starts here-->
+    <div>
+      <app-navbar></app-navbar>
+    </div>
+    <!--navbar ends here-->
+
+    <div class="container mt-4 mb-5">
+      <h1 class="text-center mb-4 main-title">Mathematics & Physics Tests</h1>
+      
+      <div class="row">
+        <div class="col-12">
+          <p class="lead text-center description mb-4">
+            Access previous tests and practice materials for Mathematics and Physics courses.
+          </p>
+        </div>
+      </div>
+
+      <!-- Search and Filter Section -->
+      <div class="row mb-4">
+        <div class="col-md-8 mx-auto">
+          <div class="search-filter-container">
+            <!-- Search Input -->
+            <div class="search-wrapper">
+              <i class="fas fa-search search-icon"></i>
+              <input 
+                type="text" 
+                class="form-control search-input" 
+                placeholder="Search tests..."
+                [(ngModel)]="searchTerm"
+                (input)="applyFilters()"
+              >
+            </div>
+
+            <!-- Filter Dropdowns -->
+            <div class="filters-wrapper mt-3">
+              <select 
+                class="form-select filter-select" 
+                [(ngModel)]="selectedYear"
+                (change)="applyFilters()"
+              >
+                <option value="">All Years</option>
+                @for (year of uniqueYears; track year) {
+                  <option [value]="year">{{ year }}</option>
+                }
+              </select>
+
+              <select 
+                class="form-select filter-select" 
+                [(ngModel)]="selectedCourse"
+                (change)="applyFilters()"
+              >
+                <option value="">All Courses</option>
+                @for (course of uniqueCourses; track course) {
+                  <option [value]="course">{{ course }}</option>
+                }
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results count -->
+      <div class="row mb-3">
+        <div class="col-12">
+          <p class="results-count">
+            Showing {{ filteredTests.length }} {{ filteredTests.length === 1 ? 'result' : 'results' }}
+          </p>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Test Name</th>
+              <th>Course</th>
+              <th>Year</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (test of filteredTests; track test) {
+              <tr class="test-row">
+                <td class="test-title">{{ test.test }}</td>
+                <td>{{ test.course }}</td>
+                <td>{{ test.year | date:'yyyy' }}</td>
+                <td>
+                  <a [href]="test.link" target="_blank" class="btn btn-download btn-sm">
+                    <i class="fas fa-download me-1"></i> Download
+                  </a>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+
+        @if (filteredTests.length === 0) {
+          <div class="text-center empty-message">
+            <i class="fas fa-search fa-2x mb-3"></i>
+            <p>No tests found matching your criteria.</p>
+            <button class="btn btn-link" (click)="resetFilters()">Reset filters</button>
+          </div>
+        }
+      </div>
+    </div>
+  
+  <!--footer-->
+  <div>
+    <app-footer></app-footer>
+  </div>
+  
